@@ -1,5 +1,5 @@
 import express from "express";
-import fetch from "node-fetch"; // make sure installed
+import fetch from "node-fetch";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -9,10 +9,7 @@ const port = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static frontend files
 app.use(express.static(path.join(__dirname, "public")));
-
-// --- API ROUTES ---
 
 app.get("/api/oracle-cards", async (req, res) => {
   try {
