@@ -1,7 +1,7 @@
 import express from "express";
-import fetch from "node-fetch";
 import path from "path";
 import { fileURLToPath } from "url";
+import cors from "cors";
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -9,35 +9,22 @@ const port = process.env.PORT || 3001;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Enable CORS so your React frontend can fetch data
+app.use(cors());
+
+// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/api/oracle-cards", async (req, res) => {
-  try {
-    const response = await fetch(
-      "https://tkyano.github.io/csce242/projects/part7/json/oracle-cards.json"
-    );
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    console.error("Error fetching oracle cards:", err);
-    res.status(500).json({ error: "Failed to fetch oracle cards" });
-  }
+// API routes
+app.get("/api/oracle-cards", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "json", "oracle-cards.json"));
 });
 
-app.get("/api/featured-decks", async (req, res) => {
-  try {
-    const response = await fetch(
-      "https://tkyano.github.io/csce242/projects/part7/json/featured-decks.json"
-    );
-    const data = await response.json();
-    res.json(data);
-  } catch (err) {
-    console.error("Error fetching featured decks:", err);
-    res.status(500).json({ error: "Failed to fetch featured decks" });
-  }
+app.get("/api/featured-decks", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "json", "featured-decks.json"));
 });
 
-// Catch-all route for SPA
+// Catch-all for SPA React app
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
