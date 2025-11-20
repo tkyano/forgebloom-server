@@ -55,7 +55,7 @@ app.get("/api/decks/:deckId", (req, res) => {
   res.json(deck);
 });
 
-// POST add card
+// POST add card (updates count if exists)
 app.post("/api/decks/:deckId/add-card", (req, res) => {
   const { deckId } = req.params;
 
@@ -70,9 +70,13 @@ app.post("/api/decks/:deckId/add-card", (req, res) => {
 
   const deck = loadDeck(deckId);
 
-  // Check duplicate by name+type
   const index = deck.findIndex(c => c.name === req.body.name && c.type === req.body.type);
-  if (index === -1) deck.push(req.body);
+
+  if (index === -1) {
+    deck.push({ ...req.body, count: 1 });
+  } else {
+    deck[index].count = (deck[index].count || 1) + 1;
+  }
 
   saveDeck(deckId, deck);
   res.json({ success: true, deck });
@@ -89,12 +93,27 @@ app.post("/api/decks/:deckId/remove-card", (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const deck = loadDeck(deckId);
-  const newDeck = deck.filter(c => !(c.name === req.body.name && c.type === req.body.type));
-  saveDeck(deckId, newDeck);
 
-  res.json({ success: true, deck: newDeck });
+  const index = deck.findIndex(c => c.name === req.body.name && c.type === req.body.type);
+
+  if (index !== -1) {
+    deck.splice(index, 1); // remove the card entirely
+    saveDeck(deckId, deck);
+    res.json({ success: true, deck });
+  } else {
+    res.status(404).json({ success: false, message: "Card not found" });
+  }
 });
 
+// --- Featured decks
+app.get("/api/featured-decks", (req, res) => {
+  const filePath = path.join(__dirname, "public", "json", "featured-decks.json");
+  if (!fs.existsSync(filePath)) {
+    return res.status(404).json({ error: "Featured decks file not found" });
+  }
+  const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  res.json(data);
+});
 
 // SPA fallback
 app.get(/.*/, (req, res) => {

@@ -12,39 +12,15 @@
     }
   },
   {
-    "name": "Box of Free-Range Goblins",
+    "name": "Sensory Deprivation",
     "type": "Unknown",
     "image_uris": {
-      "small": "https://cards.scryfall.io/small/front/6/9/6964c3d5-4bb7-46b1-a057-878af73f2e5f.jpg?1562917032",
-      "normal": "https://cards.scryfall.io/normal/front/6/9/6964c3d5-4bb7-46b1-a057-878af73f2e5f.jpg?1562917032",
-      "large": "https://cards.scryfall.io/large/front/6/9/6964c3d5-4bb7-46b1-a057-878af73f2e5f.jpg?1562917032",
-      "png": "https://cards.scryfall.io/png/front/6/9/6964c3d5-4bb7-46b1-a057-878af73f2e5f.png?1562917032",
-      "art_crop": "https://cards.scryfall.io/art_crop/front/6/9/6964c3d5-4bb7-46b1-a057-878af73f2e5f.jpg?1562917032",
-      "border_crop": "https://cards.scryfall.io/border_crop/front/6/9/6964c3d5-4bb7-46b1-a057-878af73f2e5f.jpg?1562917032"
-    }
-  },
-  {
-    "name": "Freewind Equenaut",
-    "type": "Unknown",
-    "image_uris": {
-      "small": "https://cards.scryfall.io/small/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783",
-      "normal": "https://cards.scryfall.io/normal/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783",
-      "large": "https://cards.scryfall.io/large/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783",
-      "png": "https://cards.scryfall.io/png/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.png?1592751783",
-      "art_crop": "https://cards.scryfall.io/art_crop/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783",
-      "border_crop": "https://cards.scryfall.io/border_crop/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783"
-    }
-  },
-  {
-    "name": "Wall of Fortune",
-    "type": "Unknown",
-    "image_uris": {
-      "small": "https://cards.scryfall.io/small/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503",
-      "normal": "https://cards.scryfall.io/normal/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503",
-      "large": "https://cards.scryfall.io/large/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503",
-      "png": "https://cards.scryfall.io/png/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.png?1583965503",
-      "art_crop": "https://cards.scryfall.io/art_crop/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503",
-      "border_crop": "https://cards.scryfall.io/border_crop/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503"
+      "small": "https://cards.scryfall.io/small/front/7/0/7050735c-b232-47a6-a342-01795bfd0d46.jpg?1562830795",
+      "normal": "https://cards.scryfall.io/normal/front/7/0/7050735c-b232-47a6-a342-01795bfd0d46.jpg?1562830795",
+      "large": "https://cards.scryfall.io/large/front/7/0/7050735c-b232-47a6-a342-01795bfd0d46.jpg?1562830795",
+      "png": "https://cards.scryfall.io/png/front/7/0/7050735c-b232-47a6-a342-01795bfd0d46.png?1562830795",
+      "art_crop": "https://cards.scryfall.io/art_crop/front/7/0/7050735c-b232-47a6-a342-01795bfd0d46.jpg?1562830795",
+      "border_crop": "https://cards.scryfall.io/border_crop/front/7/0/7050735c-b232-47a6-a342-01795bfd0d46.jpg?1562830795"
     }
   }
 ]
