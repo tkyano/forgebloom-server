@@ -78,6 +78,24 @@ app.post("/api/decks/:deckId/add-card", (req, res) => {
   res.json({ success: true, deck });
 });
 
+// POST remove card
+app.post("/api/decks/:deckId/remove-card", (req, res) => {
+  const { deckId } = req.params;
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    type: Joi.string().allow("", null)
+  });
+  const { error } = schema.validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const deck = loadDeck(deckId);
+  const newDeck = deck.filter(c => !(c.name === req.body.name && c.type === req.body.type));
+  saveDeck(deckId, newDeck);
+
+  res.json({ success: true, deck: newDeck });
+});
+
+
 // SPA fallback
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));

@@ -34,5 +34,17 @@
       "art_crop": "https://cards.scryfall.io/art_crop/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783",
       "border_crop": "https://cards.scryfall.io/border_crop/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783"
     }
+  },
+  {
+    "name": "Wall of Fortune",
+    "type": "Unknown",
+    "image_uris": {
+      "small": "https://cards.scryfall.io/small/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503",
+      "normal": "https://cards.scryfall.io/normal/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503",
+      "large": "https://cards.scryfall.io/large/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503",
+      "png": "https://cards.scryfall.io/png/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.png?1583965503",
+      "art_crop": "https://cards.scryfall.io/art_crop/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503",
+      "border_crop": "https://cards.scryfall.io/border_crop/front/7/d/7d09f247-99c6-4038-9cd1-7c4ccc3d7005.jpg?1583965503"
+    }
   }
 ]
