@@ -13,45 +13,35 @@ const __dirname = path.dirname(__filename);
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
 
-// === File paths ===
-const DATA_DIR = path.join(__dirname, "data");
-const ORACLE_CARDS_PATH = path.join(DATA_DIR, "oracle-cards.json");
-const FEATURED_DECKS_PATH = path.join(DATA_DIR, "featured-decks.json");
+// --- Paths for JSON data ---
+const DATA_DIR = path.join(__dirname, "data", "json");
 const DECKS_DIR = path.join(DATA_DIR, "decks");
 
-// Ensure data folders exist
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
-if (!fs.existsSync(DECKS_DIR)) fs.mkdirSync(DECKS_DIR);
+if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+if (!fs.existsSync(DECKS_DIR)) fs.mkdirSync(DECKS_DIR, { recursive: true });
 
-// === Load oracle cards ===
+// --- Oracle Cards ---
+const getStaticCards = () => {
+  const filePath = path.join(DATA_DIR, "oracle-cards.json");
+  return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+};
+
 app.get("/api/oracle-cards", (req, res) => {
-  try {
-    const cards = JSON.parse(fs.readFileSync(ORACLE_CARDS_PATH, "utf-8"));
-    res.json(cards);
-  } catch (err) {
-    console.error("Failed loading oracle cards:", err);
-    res.status(500).json({ error: "Cannot load oracle cards" });
-  }
+  res.json(getStaticCards());
 });
 
-// === Load featured decks ===
-app.get("/api/featured-decks", (req, res) => {
-  try {
-    const data = JSON.parse(fs.readFileSync(FEATURED_DECKS_PATH, "utf-8"));
-    res.json(data);
-  } catch (err) {
-    res.status(500).json({ error: "Cannot load featured decks" });
-  }
+// --- Ensure deck files exist ---
+const deckFiles = ["new-deck","starter","aggro","control","midrange","mono-base","chaos"];
+deckFiles.forEach(deckId => {
+  const filePath = path.join(DECKS_DIR, `${deckId}.json`);
+  if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, JSON.stringify([], null, 2));
 });
 
-// === Deck helpers ===
+// --- Load / Save Deck ---
 const loadDeck = (deckId) => {
   const filePath = path.join(DECKS_DIR, `${deckId}.json`);
-  if (!fs.existsSync(filePath))
-    fs.writeFileSync(filePath, JSON.stringify([], null, 2));
-
+  if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, JSON.stringify([], null, 2));
   return JSON.parse(fs.readFileSync(filePath, "utf-8"));
 };
 
@@ -60,31 +50,27 @@ const saveDeck = (deckId, deck) => {
   fs.writeFileSync(filePath, JSON.stringify(deck, null, 2));
 };
 
-// === GET deck ===
+// --- Deck APIs ---
 app.get("/api/decks/:deckId", (req, res) => {
   const { deckId } = req.params;
   const deck = loadDeck(deckId);
   res.json(deck);
 });
 
-// === Add card ===
 app.post("/api/decks/:deckId/add-card", (req, res) => {
   const { deckId } = req.params;
 
   const schema = Joi.object({
     name: Joi.string().required(),
     type: Joi.string().allow("", null),
-    image_uris: Joi.object().optional(),
+    image_uris: Joi.object().optional()
   });
 
   const { error } = schema.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const deck = loadDeck(deckId);
-
-  const index = deck.findIndex(
-    (c) => c.name === req.body.name && c.type === req.body.type
-  );
+  const index = deck.findIndex(c => c.name === req.body.name && c.type === req.body.type);
 
   if (index === -1) {
     deck.push({ ...req.body, count: 1 });
@@ -93,38 +79,46 @@ app.post("/api/decks/:deckId/add-card", (req, res) => {
   }
 
   saveDeck(deckId, deck);
-
   res.json({ success: true, deck });
 });
 
-// === Remove card ===
 app.post("/api/decks/:deckId/remove-card", (req, res) => {
   const { deckId } = req.params;
 
   const schema = Joi.object({
     name: Joi.string().required(),
-    type: Joi.string().allow("", null),
+    type: Joi.string().allow("", null)
   });
 
   const { error } = schema.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const deck = loadDeck(deckId);
+  const index = deck.findIndex(c => c.name === req.body.name && c.type === req.body.type);
 
-  const newDeck = deck.filter(
-    (c) => !(c.name === req.body.name && c.type === req.body.type)
-  );
-
-  saveDeck(deckId, newDeck);
-
-  res.json({ success: true, deck: newDeck });
+  if (index !== -1) {
+    deck.splice(index, 1);
+    saveDeck(deckId, deck);
+    res.json({ success: true, deck });
+  } else {
+    res.status(404).json({ success: false, message: "Card not found" });
+  }
 });
 
-// === SPA fallback ===
-app.get(/.*/, (req, res) => {
+// --- Featured Decks ---
+app.get("/api/featured-decks", (req, res) => {
+  const filePath = path.join(DATA_DIR, "featured-decks.json");
+  if (!fs.existsSync(filePath)) return res.status(404).json({ error: "Featured decks file not found" });
+
+  const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+  res.json(data);
+});
+
+// --- Serve SPA ---
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-app.listen(port, () =>
-  console.log(`Server running on http://localhost:${port}`)
-);
+app.listen(port, () => console.log(`Server running on port ${port}`));
