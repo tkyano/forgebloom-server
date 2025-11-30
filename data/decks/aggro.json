@@ -9,7 +9,8 @@
       "png": "https://cards.scryfall.io/png/front/f/f/ffd726ce-85f8-4570-96e8-e0cfbd05045a.png?1562838667",
       "art_crop": "https://cards.scryfall.io/art_crop/front/f/f/ffd726ce-85f8-4570-96e8-e0cfbd05045a.jpg?1562838667",
       "border_crop": "https://cards.scryfall.io/border_crop/front/f/f/ffd726ce-85f8-4570-96e8-e0cfbd05045a.jpg?1562838667"
-    }
+    },
+    "count": 2
   },
   {
     "name": "Sensory Deprivation",
@@ -21,6 +22,20 @@
       "png": "https://cards.scryfall.io/png/front/7/0/7050735c-b232-47a6-a342-01795bfd0d46.png?1562830795",
       "art_crop": "https://cards.scryfall.io/art_crop/front/7/0/7050735c-b232-47a6-a342-01795bfd0d46.jpg?1562830795",
       "border_crop": "https://cards.scryfall.io/border_crop/front/7/0/7050735c-b232-47a6-a342-01795bfd0d46.jpg?1562830795"
-    }
+    },
+    "count": 3
+  },
+  {
+    "name": "Freewind Equenaut",
+    "type": "Unknown",
+    "image_uris": {
+      "small": "https://cards.scryfall.io/small/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783",
+      "normal": "https://cards.scryfall.io/normal/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783",
+      "large": "https://cards.scryfall.io/large/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783",
+      "png": "https://cards.scryfall.io/png/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.png?1592751783",
+      "art_crop": "https://cards.scryfall.io/art_crop/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783",
+      "border_crop": "https://cards.scryfall.io/border_crop/front/2/8/28fd10fc-11de-4fd9-a8af-855f116d71d0.jpg?1592751783"
+    },
+    "count": 1
   }
 ]
