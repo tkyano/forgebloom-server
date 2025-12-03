@@ -15,11 +15,13 @@ const __dirname = path.dirname(__filename);
 app.use(cors());
 app.use(express.json());
 
+// --------------------- CONNECT TO MONGODB ---------------------
 mongoose
-  .connect(process.env.MONGO_URI || "mongodb+srv://tkyano05:YDWRI4Nu4jG3mMds@cluster0.omtjkvp.mongodb.net/forgebloom")
+  .connect("mongodb+srv://tkyano05:YDWRI4Nu4jG3mMds@cluster0.omtjkvp.mongodb.net/forgebloom")
   .then(() => console.log("Connected to MongoDB..."))
   .catch((err) => console.error("Could not connect to MongoDB...", err));
 
+// --------------------- SCHEMAS ---------------------
 const cardSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: String,
@@ -34,9 +36,9 @@ const deckSchema = new mongoose.Schema({
 
 const Deck = mongoose.model("Deck", deckSchema);
 
+// --------------------- ORACLE CARDS ---------------------
 const DATA_DIR = path.join(__dirname, "data");
 const ORACLE_FILE = path.join(DATA_DIR, "oracle-cards.json");
-const FEATURED_FILE = path.join(DATA_DIR, "featured-decks.json");
 
 const getStaticCards = () => {
   if (!fs.existsSync(ORACLE_FILE)) throw new Error("Oracle cards not found");
@@ -52,6 +54,7 @@ app.get("/api/oracle-cards", (req, res) => {
   }
 });
 
+// --------------------- DECK HELPERS ---------------------
 const loadDeck = async (deckId) => {
   let deck = await Deck.findOne({ deckId });
   if (!deck) {
@@ -65,10 +68,11 @@ const saveDeck = async (deck) => {
   await deck.save();
 };
 
+// --------------------- DECK ROUTES ---------------------
 app.get("/api/decks/:deckId", async (req, res) => {
   try {
     const deck = await loadDeck(req.params.deckId);
-    res.json(deck);
+    res.json(deck); // send deck object
   } catch (err) {
     res.status(500).json({ error: "Failed to load deck" });
   }
@@ -101,103 +105,11 @@ app.post("/api/decks/:deckId/add-card", async (req, res) => {
   }
 });
 
-app.post("/api/decks/:deckId/remove-card", async (req, res) => {
-  const { deckId } = req.params;
-
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    type: Joi.string().allow("", null),
-  });
-
-  const { error } = schema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  try {
-    const deck = await loadDeck(deckId);
-    const index = deck.cards.findIndex((c) => c.name === req.body.name);
-
-    if (index === -1) return res.status(404).json({ message: "Card not found" });
-
-    deck.cards.splice(index, 1);
-    await saveDeck(deck);
-
-    res.json({ success: true, deck: deck.cards });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to remove card" });
-  }
-});
-
-app.put("/api/decks/:deckId/update-card", async (req, res) => {
-  const { deckId } = req.params;
-
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    type: Joi.string().allow("", null),
-    count: Joi.number().integer().min(1).required(),
-    image_uris: Joi.object(),
-  });
-
-  const { error } = schema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  try {
-    const deck = await loadDeck(deckId);
-    const index = deck.cards.findIndex((c) => c.name === req.body.name);
-
-    if (index === -1) return res.status(404).json({ message: "Card not found" });
-
-    deck.cards[index] = { ...deck.cards[index]._doc, ...req.body };
-    await saveDeck(deck);
-
-    res.json({ success: true, deck: deck.cards });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to update card" });
-  }
-});
-
-app.delete("/api/decks/:deckId/delete-card", async (req, res) => {
-  const { deckId } = req.params;
-
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    type: Joi.string().allow("", null),
-  });
-
-  const { error } = schema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  try {
-    const deck = await loadDeck(deckId);
-    const index = deck.cards.findIndex((c) => c.name === req.body.name);
-
-    if (index === -1) return res.status(404).json({ message: "Card not found" });
-
-    deck.cards.splice(index, 1);
-    await saveDeck(deck);
-
-    res.json({ success: true, deck: deck.cards });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to delete card" });
-  }
-});
-
-app.get("/api/featured-decks", (req, res) => {
-  try {
-    if (!fs.existsSync(FEATURED_FILE)) throw new Error("Featured decks not found");
-    const featuredDecks = JSON.parse(fs.readFileSync(FEATURED_FILE, "utf-8"));
-    res.json(featuredDecks);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to load featured decks" });
-  }
-});
-
+// --------------------- STATIC FILES ---------------------
 app.use(express.static(path.join(__dirname, "public")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+// --------------------- START SERVER ---------------------
 app.listen(port, () => console.log(`Server running on ${port}`));
